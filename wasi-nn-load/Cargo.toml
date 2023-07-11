@@ -1,0 +1,17 @@
+[package]
+name = "wasi-nn-load"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pyo3 = { version = "0.19.0", features = ["abi3-py311"] }
+image = { version = "0.23.14", default-features = false, features = ["gif", "jpeg", "ico", "png", "pnm", "tga", "tiff", "webp", "bmp", "hdr", "dxt", "dds", "farbfeld"]  }
+wasi-nn = { version = "0.2.1" }
+wlr-libpy = { git = "https://github.com/vmware-labs/webassembly-language-runtimes.git", features = [
+    "py_main",
+] }
+
+[build-dependencies]
+wlr-libpy = { git = "https://github.com/vmware-labs/webassembly-language-runtimes.git", features = [
+    "build",
+] }
