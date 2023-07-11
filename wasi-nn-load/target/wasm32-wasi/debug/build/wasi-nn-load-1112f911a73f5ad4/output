@@ -1,0 +1,8 @@
+cargo:rustc-link-search=native=/home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/target/wasm32-wasi/wasi-deps/wasi-sysroot/lib/wasm32-wasi
+cargo:rustc-link-search=native=/home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/target/wasm32-wasi/wasi-deps/lib/wasi
+cargo:rustc-link-search=native=/home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/target/wasm32-wasi/wasi-deps/lib/wasm32-wasi
+cargo:rustc-link-lib=wasi-emulated-signal
+cargo:rustc-link-lib=wasi-emulated-getpid
+cargo:rustc-link-lib=wasi-emulated-process-clocks
+cargo:rustc-link-lib=clang_rt.builtins-wasm32
+cargo:rustc-link-lib=python3.11

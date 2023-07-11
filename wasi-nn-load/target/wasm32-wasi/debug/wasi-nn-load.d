@@ -1,0 +1,1 @@
+/home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/target/wasm32-wasi/debug/wasi-nn-load.wasm: /home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/build.rs /home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/src/load.rs /home/eshaan/Desktop/cncf/work/wasi-nn-python-bindings/wasi-nn-load/src/main.rs

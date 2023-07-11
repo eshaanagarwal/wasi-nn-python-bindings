@@ -1,0 +1,10 @@
+prefix=
+exec_prefix=${prefix}
+libdir=${prefix}/lib/wasm32-wasi
+includedir=${prefix}/include/python3.11
+
+Name: libpython3.11
+Description: libpython3.11 allows embedding the CPython interpreter
+Version: 3.11.3
+Libs: -L${libdir} -lpython3.11 -Wl,-z,stack-size=524288 -Wl,--stack-first -Wl,--initial-memory=10485760 -lwasi-emulated-getpid -lwasi-emulated-signal -lwasi-emulated-process-clocks
+Cflags: -I${includedir}
