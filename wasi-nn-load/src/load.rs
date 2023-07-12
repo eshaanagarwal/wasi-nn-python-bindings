@@ -5,7 +5,7 @@ use std::io::Read;
 
 // This function will contain wasi_nn load function which will me mapped to be used with pyo3
 #[pyo3::pyfunction]
-pub fn load_image_graph(image_tensor: wasi_nn::GraphBuilderArray<'_>){
+pub fn load_image_graph<'a>(image_tensor: wasi_nn::GraphBuilderArray<'a>){
     // Load the model.
     let encoding = wasi_nn::GRAPH_ENCODING_PYTORCH;
     let target = wasi_nn::EXECUTION_TARGET_CPU;
@@ -55,6 +55,6 @@ use pyo3::{
 #[pyo3::pymodule]
 #[pyo3(name = "load")]
 pub fn load_module(_py: Python<'_>, module: &PyModule) -> PyResult<()> {
-    module.add_function(wrap_pyfunction!(image_to_tensor, module)?)
-    // module.add_function(wrap_pyfunction!(load_image_graph, module)?)
+    module.add_function(wrap_pyfunction!(image_to_tensor, module)?)?;
+    module.add_function(wrap_pyfunction!(load_image_graph, module)?)?;
 }
