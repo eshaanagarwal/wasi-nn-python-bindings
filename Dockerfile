@@ -1,33 +1,33 @@
+# This Dockerfile defines an image for a container that can run
+# WasmEdge with Wasi-NN and underlying PyTorch
+
+# See the examples folder for scripts that use this.
+
 # Download base image ubuntu 20.04
 FROM ubuntu:20.04
 
+# Install needed basic tools
+RUN apt update && apt install -y \
+    curl \
+    git \
+    python3 \
+    unzip
 
-RUN apt update
-# Install git
-RUN apt install -y git
-
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-CMD source "$HOME/.cargo/env"
-CMD rustup target add wasm32-wasi
+# Install Rust with wasm32-wasi support
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup update && rustup target add wasm32-wasi
 
 # Install wasmedge with pytorch plugin
 RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash -s -- --plugins wasi_nn-pytorch
+ENV PATH="/root/.wasmedge/bin:${PATH}"
 
-# Run this command to make the installed binary available in the current session.
-CMD source "$HOME/.wasmedge/env"
+# Download and install pytorch
+ARG PYTORCH_VERSION="1.8.2"
+ARG PYTORCH_ABI="libtorch-cxx11-abi"
 
-# Export environment variable for pytorch 1.8.2
-RUN export PYTORCH_VERSION="1.8.2"
-RUN export PYTORCH_ABI="libtorch-cxx11-abi"
+RUN curl -s -L -O --remote-name-all https://download.pytorch.org/libtorch/lts/1.8/cpu/${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip && \
+    unzip -q "${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip" && \
+    rm -f "${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip"
 
-CMD curl -s -L -O --remote-name-all https://download.pytorch.org/libtorch/lts/1.8/cpu/${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip
-CMD unzip -q "${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip"
-CMD rm -f "${PYTORCH_ABI}-shared-with-deps-${PYTORCH_VERSION}%2Bcpu.zip"
-CMD export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(pwd)/libtorch/lib
-
-CMD git clone https://github.com/second-state/WasmEdge-WASINN-examples.git
-
-WORKDIR /WasmEdge-WASINN-examples/pytorch-mobilenet-image
-
-CMD wasmedge --dir .:. wasmedge-wasinn-example-mobilenet-image.wasm mobilenet.pt input.jpg
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/libtorch/lib
